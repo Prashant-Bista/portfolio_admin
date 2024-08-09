@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "202425399869",
+    "project_id": "prashant-bista",
+    "storage_bucket": "prashant-bista.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:202425399869:android:d525b03723a5bf0ea40854",
+        "android_client_info": {
+          "package_name": "com.example.portfolio_admin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZfP2xHrdGAf6vZ_mJDao9L50eSsahXd0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:202425399869:android:0392b87281f316fca40854",
+        "android_client_info": {
+          "package_name": "com.example.prashant_bista"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZfP2xHrdGAf6vZ_mJDao9L50eSsahXd0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,42 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:portfolio_admin/components.dart';
+
+Future DialogError(BuildContext context, String title, var icon) {
+  return showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        icon: icon,
+            title: Text(
+              title,
+              style: TextStyle(fontSize: 20),
+            ),
+            shape: RoundedRectangleBorder(
+              side: BorderSide(color: Colors.lightBlueAccent),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          ));
+}
+
+var logger = Logger();
+
+class AddDataFirestore {
+  CollectionReference table = FirebaseFirestore.instance.collection("articles");
+  Future addData(String title, String body) async {
+    await table.add({
+      'title': title,
+      'body': body,
+    }).then((value) {
+      logger.d("Success");
+      return true;
+    }).catchError((error) {
+      logger.d(error);
+      return false;
+    });
+  }
+}
 
 class BlogPost extends StatefulWidget {
   const BlogPost({super.key});
@@ -9,13 +46,16 @@ class BlogPost extends StatefulWidget {
 }
 
 class _BlogPostState extends State<BlogPost> {
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _contentController = TextEditingController();
+
   var formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     double widthDevice = MediaQuery.of(context).size.width;
     double heightDevice = MediaQuery.of(context).size.height;
     return Scaffold(
-        drawer: Drawer(),
+        endDrawer: Drawer(),
         extendBodyBehindAppBar: true,
         body: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -58,116 +98,44 @@ class _BlogPostState extends State<BlogPost> {
                       alignment: WrapAlignment.start,
                       crossAxisAlignment: WrapCrossAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            SizedBox(width: 20,),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                RobotoText(
-                                  size: 25,
-                                  text: "Title",
-                                  isbold: true,
-                                ),
-                                SizedBox(
-                                  width: widthDevice / 1.1,
-                                  child: TextFormField(
-                                      validator: (text) {
-                                        if (text.toString().length == 0) {
-                                          return "Please Fill up this field";
-                                        }
-                                      },
-                                      decoration: InputDecoration(
-                                          labelText: "Enter your title",
-                                          enabledBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(5),
-                                            borderSide: BorderSide(
-                                              color: Colors.lightBlueAccent,
-                                              style: BorderStyle.solid,
-                                            ),
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(10),
-                                            borderSide: BorderSide(
-                                              width: 0.5,
-                                              style: BorderStyle.solid,
-                                              color: Colors.lightBlue,
-                                            ),
-                                          ))),
-                                )
-                              ],
-                            ),
-                          ],
+                        BlogForm(
+                          heading: "Title",
+                          body: "Please enter the title of your blog",
+                          maxLines: 1,
+                          controller: _titleController,
                         ),
-                        SizedBox(height: 20,),
-                        Row(
-                          children: [
-                            SizedBox(
-                              height: 20,
-                              width: 20,
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                RobotoText(
-                                  size: 25,
-                                  text: "Content",
-                                  isbold: true,
-                                ),
-                                SizedBox(
-                                  width: widthDevice / 1.1,
-                                  child: TextFormField(
-                                    validator: (text) {
-                                      if (text.toString().length == 0) {
-                                        return "Please Fill up this field";
-                                      }
-                                    },
-                                    maxLines: 20,
-                                    decoration: InputDecoration(
-                                      labelText:
-                                          "Enter your blog content for the title",
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(5),
-                                        borderSide: BorderSide(
-                                          color: Colors.lightBlueAccent,
-                                          style: BorderStyle.solid,
-                                        ),
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                        borderSide: BorderSide(
-                                          width: 0.5,
-                                          style: BorderStyle.solid,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                        borderSide: BorderSide(
-                                          width: 0.5,
-                                          style: BorderStyle.solid,
-                                          color: Colors.lightBlue,
-                                        ),
-                                      ),
-                                    ),
-
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
+                        SizedBox(
+                          height: 20,
+                        ),
+                        BlogForm(
+                          heading: "Content",
+                          body:
+                              "Please enter your content related to the title",
+                          maxLines: 35,
+                          controller: _contentController,
                         ),
                         SizedBox(
                           height: 20,
                         ),
                         Row(
                           children: [
-                            SizedBox(width: widthDevice/2.1,),
+                            SizedBox(
+                              width: widthDevice / 2.1,
+                            ),
                             ElevatedButton(
-                              onPressed: () {
-                                formKey.currentState!.validate();
+                              onPressed: () async {
+                                final toFirebase = AddDataFirestore();
+                                if (formKey.currentState!.validate()) {
+                                  formKey.currentState!.reset();
+                                  DialogError(context, "Success",Icon(Icons.check_circle,color: Colors.green,));
+                                  if (await toFirebase.addData(
+                                      _titleController.text,
+                                      _contentController.text)==false) {
+                                    DialogError(context, "Failed",Icon(Icons.report_gmailerrorred,color: Colors.red,));
+
+
+                                  }
+                                }
                               },
                               child: RobotoText(
                                 text: "Post",
@@ -178,7 +146,9 @@ class _BlogPostState extends State<BlogPost> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20,)
+                        SizedBox(
+                          height: 20,
+                        )
                       ]))
             ],
           ),
