@@ -98,4 +98,37 @@ class BlogForm extends StatelessWidget {
   }
 }
 
+class MessageHeading extends StatelessWidget {
+  final label;
+  final data;
+  const MessageHeading({super.key, this.label, this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        SizedBox(width: 50,),
+        RobotoText(
+          size: 20,
+          text: label,
+          color: Colors.white,
+        ),
+        RobotoText(
+          size: 20,
+          text: ":",
+          color: Colors.white,
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        RobotoText(
+          size: 20,
+          text: data,
+          color: Colors.white,
+        ),
+      ],
+    );
+
+  }
+}
 

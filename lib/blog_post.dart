@@ -66,15 +66,15 @@ class _BlogPostState extends State<BlogPost> {
                   title: Container(
                       padding: EdgeInsets.zero,
                       alignment: Alignment.bottomLeft,
-                      height: heightDevice / 20,
-                      width: widthDevice / 3.5,
+                      width: 150,
+                      height:25,
                       decoration: BoxDecoration(
                         color: Colors.black,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: RobotoText(
                         text: "Write Blogs here ",
-                        size: 30,
+                        size: 20,
                         color: Colors.white,
                         isbold: true,
                       )),
