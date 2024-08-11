@@ -4,15 +4,37 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:portfolio_admin/components.dart';
 
+
+
+List lst= [];
+List messages=[];
+List Contacts = [];
+List firstnames= [];
+
 var logger = Logger();
 
 class ReadMessages extends StatefulWidget {
+
   const ReadMessages({super.key});
   @override
   State<ReadMessages> createState() => _ReadMessagesState();
 }
 
 class _ReadMessagesState extends State<ReadMessages> {
+  Future getMessages() async{
+    await FirebaseFirestore.instance.collection("messages").get().then((value){
+      value.docs.forEach((element){
+        lst.add(element.data()['message']);
+      });
+    });
+
+  }
+  @override
+  void initState() {
+    getMessages();
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     double heightDevice = MediaQuery.of(context).size.height;
@@ -53,45 +75,14 @@ class _ReadMessagesState extends State<ReadMessages> {
             )
           ];
         },
-        body: ListView(
-          children: [
-            Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              alignment: WrapAlignment.spaceAround,
-              children: [
-                SizedBox(height: 20,),
-                Container(
-                  decoration: BoxDecoration(
-                      color: Colors.grey,
-                      boxShadow: [
-                        BoxShadow(blurRadius: 5, color: Colors.grey)
-                      ]),
-                  child: Wrap(
-                    direction: Axis.horizontal,
-                    children: [
-                      RobotoText(
-                        size: 20,
-                        text: "1)",
-                        color: Colors.white,
-                      ),
-                      MessageHeading(label: "FirstName", data: "Prashant" ,),
-                      MessageHeading(label: "LastName",data: "Bista",),
-                      MessageHeading(label: "Email",data: "bistaprashant1@gmail.com",),
-                      MessageHeading(label: "contact",data: "9812345678",),
+body: ListView.builder(itemCount: lst.length,itemBuilder: (context, int index){
 
-                    ],
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
-    );
+}),        ),
+      );
   }
 }
 
-class Messages extends StatefulWidget {
+class Messages extends StatelessWidget {
   final firstname;
   final lastname;
   final email;
@@ -107,42 +98,35 @@ class Messages extends StatefulWidget {
       @required this.message});
 
   @override
-  State<Messages> createState() => _MessagesState();
-}
-
-class _MessagesState extends State<Messages> {
-  @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Wrap(
-        crossAxisAlignment: WrapCrossAlignment.center,
-        alignment: WrapAlignment.spaceAround,
-        children: [
-          SizedBox(height: 20,),
-          Container(
-            decoration: BoxDecoration(
-                color: Colors.grey,
-                boxShadow: [
-                  BoxShadow(blurRadius: 5, color: Colors.grey)
-                ]),
-            child: Wrap(
-              direction: Axis.horizontal,
-              children: [
-                RobotoText(
-                  size: 20,
-                  text: "1)",
-                  color: Colors.white,
-                ),
-                MessageHeading(label: "FirstName", data: "Prashant" ,),
-                MessageHeading(label: "LastName",data: "Bista",),
-                MessageHeading(label: "Email",data: "bistaprashant1@gmail.com",),
-                MessageHeading(label: "contact",data: "9812345678",),
-
-              ],
+    return             Wrap(children: [
+      Container(
+        decoration: BoxDecoration(
+            color: Colors.grey,
+            boxShadow: [
+              BoxShadow(blurRadius: 5, color: Colors.grey)
+            ]),
+        child: Wrap(
+          children: [
+            SizedBox(width: 5,),
+            RobotoText(
+              size: 20,
+              text: "1)",
+              color: Colors.white,
             ),
-          )
-        ],
-      )
-            );
+            MessageHeading(label: "FirstName", data: firstname ,),
+            MessageHeading(label: "LastName",data: lastname,),
+            MessageHeading(label: "Email",data: email,),
+            MessageHeading(label: "contact",data: contact,),
+          ],
+        ),
+      ),
+      Container(
+        padding: EdgeInsets.all(20),
+        color:Colors.white,
+        child: RobotoText(text: "Message:\n dfslkfja;ljfa;lskjf;lakjsdf;asklfdjsa;ldfkjs;ldkfjdfal;jf;laksjfd;laksjf;laksjfd;lkjfdsa;lkfj",size: 20,),
+      ),
+    ],);
+
   }
 }
