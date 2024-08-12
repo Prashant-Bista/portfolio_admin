@@ -60,30 +60,10 @@ class _BlogPostState extends State<BlogPost> {
         body: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
-              SliverAppBar(
-                expandedHeight: 500,
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Container(
-                      padding: EdgeInsets.zero,
-                      alignment: Alignment.bottomLeft,
-                      width: 150,
-                      height:25,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: RobotoText(
-                        text: "Write Blogs here ",
-                        size: 20,
-                        color: Colors.white,
-                        isbold: true,
-                      )),
-                  background: Image.asset(
-                    "blogappbar.jpg",
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
+              CustomAppbar(
+                text: "Write a blog",
+                imagePath: "assets/blogappbar.jpg",
+              )  ,
             ];
           },
           body: ListView(

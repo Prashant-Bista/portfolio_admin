@@ -132,3 +132,76 @@ class MessageHeading extends StatelessWidget {
   }
 }
 
+class CustomAppbar extends StatelessWidget {
+  final text;
+  final imagePath;
+  const CustomAppbar({super.key, this.text, this.imagePath});
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+      iconTheme: IconThemeData(
+        size: 30.0,
+        color: Colors.black,
+        opacity: 1,
+      ),
+      expandedHeight: 500,
+      flexibleSpace: FlexibleSpaceBar(
+        title: Container(
+          decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(7.0)),
+          padding: EdgeInsets.symmetric(horizontal: 4.0),
+          child: RobotoText(
+            text: text,
+            size: 24.0,
+            isbold: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        background: Image.asset(
+          imagePath,
+          fit: BoxFit.cover,
+        ),
+      ),
+    )
+    ;
+  }
+}
+
+class HomeIcons extends StatelessWidget {
+  final link;
+  final imagePath;
+  final text;
+
+  const HomeIcons({super.key, this.link, this.imagePath, this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    double widthDevice = MediaQuery.of(context).size.width;
+    double heightDevice = MediaQuery.of(context).size.width;
+
+    return Column(
+      children: [
+        MaterialButton(
+          shape:ContinuousRectangleBorder(
+              borderRadius: BorderRadius.circular(75.0)
+          ),
+          elevation: 50.0,
+          color: Colors.blue,
+          padding: EdgeInsets.all(20),
+          onPressed: (){
+            Navigator.pushNamed(context, link);
+          },
+          child: SizedBox(
+              height: widthDevice/4.15,
+              child: Image.asset(imagePath,height: heightDevice/2.175,width: widthDevice/4.65,)),
+        ),
+        RobotoText(size: 25, text: text)
+      ],
+    );
+
+  }
+}
+
+

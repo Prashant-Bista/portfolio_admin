@@ -39,33 +39,16 @@ class Home extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Column(
-                    children: [
-                      MaterialButton(
-                        padding: EdgeInsets.zero,
-                          onPressed: (){
-                          Navigator.pushNamed(context, '/blog');
-                          },
-                      child: SizedBox(
-                        height: widthDevice/4.65,
-                          child: Image.asset("assets/Blog.png",height: heightDevice/2.175,width: widthDevice/4.65,))),
-                      RobotoText(size: 25, text: "Blog")
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      MaterialButton(
-                        padding: EdgeInsets.zero,
-                        onPressed: (){
-                          Navigator.pushNamed(context, '/messages');
-                        },
-                      child: SizedBox(
-                          height: widthDevice/4.15,
-                          child: Image.asset("assets/Messages.png",height: heightDevice/2.175,width: widthDevice/4.65,)),
-                      ),
-                      RobotoText(size: 25, text: "Messages")
-                    ],
-                  )
+                  HomeIcons(text: "Post",imagePath: "assets/Blog.png" , link: '/post',),
+                  HomeIcons(text: "Messages",imagePath: "assets/Messages.png" , link: '/messages',),
+                  HomeIcons(text: "Blogs",imagePath: "assets/blog_read.png" , link: '/view',),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  HomeIcons(text: "UploadProjects",imagePath: "assets/upload_projects.png" , link: '/projects',),
+
                 ],
               )
 

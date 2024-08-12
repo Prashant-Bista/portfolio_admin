@@ -11,9 +11,36 @@ List contacts = [];
 List firstNames= [];
 List lastNames=[];
 List emails=[];
-
+var snapShots;
 var logger = Logger();
+Future getMessages() async{
+  await FirebaseFirestore.instance.collection("messages").get().then((value){
+    value.docs.forEach((element){
+      messages.add(element.data()['message']);
+    });
+  });
+  await FirebaseFirestore.instance.collection("messages").get().then((value){
+    value.docs.forEach((element){
+      firstNames.add(element.data()['first name']);
+    });
+  });
+  await FirebaseFirestore.instance.collection("messages").get().then((value){
+    value.docs.forEach((element){
+      lastNames.add(element.data()['last name']);
+    });
+  });
+  await FirebaseFirestore.instance.collection("messages").get().then((value){
+    value.docs.forEach((element){
+      emails.add(element.data()['email']);
+    });
+  });
+  await FirebaseFirestore.instance.collection("messages").get().then((value){
+    value.docs.forEach((element){
+      contacts.add(element.data()['phone number']);
+    });
+  });
 
+}
 class ReadMessages extends StatefulWidget {
 
   const ReadMessages({super.key});
@@ -22,34 +49,7 @@ class ReadMessages extends StatefulWidget {
 }
 
 class _ReadMessagesState extends State<ReadMessages> {
-  Future getMessages() async{
-    await FirebaseFirestore.instance.collection("messages").get().then((value){
-      value.docs.forEach((element){
-        messages.add(element.data()['message']);
-      });
-    });
-    await FirebaseFirestore.instance.collection("messages").get().then((value){
-      value.docs.forEach((element){
-        firstNames.add(element.data()['first name']);
-      });
-    });
-    await FirebaseFirestore.instance.collection("messages").get().then((value){
-      value.docs.forEach((element){
-        lastNames.add(element.data()['last name']);
-      });
-    });
-    await FirebaseFirestore.instance.collection("messages").get().then((value){
-      value.docs.forEach((element){
-        emails.add(element.data()['email']);
-      });
-    });
-    await FirebaseFirestore.instance.collection("messages").get().then((value){
-      value.docs.forEach((element){
-        contacts.add(element.data()['phone number']);
-      });
-    });
 
-  }
   @override
   void initState() {
     getMessages();
@@ -68,38 +68,20 @@ class _ReadMessagesState extends State<ReadMessages> {
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext conext, bool isScrolled) {
           return <Widget>[
-            SliverAppBar(
-              expandedHeight: 500,
-              flexibleSpace: FlexibleSpaceBar(
-                centerTitle: true,
-                title: SafeArea(
-                  child: Container(
-                    padding: EdgeInsets.all(3),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    width: 150,
-                    height:30,
-                    child: RobotoText(
-                      text: "Your Messages",
-                      size: 20,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                background: Image.asset(
-                  "assets/messagesappbar.jpg",
-                  fit: BoxFit.cover,
-                  filterQuality: FilterQuality.high,
-                ),
-              ),
-            )
-          ];
+            CustomAppbar(
+              text: "Messages",
+              imagePath: "assets/messagesappbar.jpg",
+            )            ];
         },
 body: ListView.builder(itemCount: messages.length,itemBuilder: (context, int index){
+  if (messages.length ==0 ){
+    return CircularProgressIndicator(
+      backgroundColor: Colors.lightBlueAccent,
+    );
+  }
+  else
   return Messages(index: index,firstname: firstNames[index], email: emails[index], message: messages[index],lastname: lastNames[index],contact: contacts[index],);
-  print(index);
+
 }),        ),
       );
   }
@@ -127,6 +109,7 @@ class Messages extends StatelessWidget {
     return             Wrap(children: [
       Container(
         decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: Colors.blue,width: 5.0),left: BorderSide(color: Colors.blue,width: 5.0),right: BorderSide(color: Colors.blue,width: 5.0)),
             color: Colors.grey,
             boxShadow: [
               BoxShadow(blurRadius: 5, color: Colors.grey)
@@ -148,9 +131,16 @@ class Messages extends StatelessWidget {
       ),
       Container(
         width: widthDevice,
-        padding: EdgeInsets.all(20),
-        color:Colors.white,
+        padding: EdgeInsets.symmetric(horizontal: 50,vertical: 5),
         child: RobotoText(text: "Message:\n $message",size: 20,),
+        decoration: BoxDecoration(
+          border: Border(
+            left: BorderSide(color: Colors.blue,width: 5.0),
+            right: BorderSide(color: Colors.blue,width: 5.0),
+          ),
+          color: Colors.white
+
+        ),
       ),
     ],);
 
