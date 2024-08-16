@@ -132,6 +132,18 @@ class Messages extends StatelessWidget {
                 ),
                 SizedBox(width: widthDevice/1.1,),
                 IconButton(padding:EdgeInsets.zero,onPressed: () async{
+                  return showDialog(context: context, builder: (BuildContext context)=>AlertDialog(
+                        title: RobotoText(text: "Do you really want to delete the message",size: 20,color: Colors.black,),
+                        icon: Icon(Icons.warning,color: Colors.yellow,),
+                    actionsAlignment: MainAxisAlignment.spaceAround,
+
+                    actions:[MaterialButton(onPressed: (){
+                      Navigator.pop(context);
+                  },child: RobotoText(size: 15, text: "Delete",color: Colors.red,)),MaterialButton(onPressed:() { Navigator.pop(context);},child: RobotoText(size: 15, text: "Cancel",color: Colors.black,))],
+                  ),
+
+                  );
+
                   // AlertDialog(
                   //     title: RobotoText(text: "Do you really want to delete the message",size: 20,color: Colors.black,),
                   //     icon: Icon(Icons.warning,color: Colors.yellow,),);

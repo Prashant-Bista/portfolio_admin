@@ -87,7 +87,18 @@ class _BlogsState extends State<Blogs> {
                 expand= !expand;
               });
             }, icon: Icon(Icons.arrow_drop_down_circle,color: Colors.black,)),
-            IconButton(onPressed: (){}, icon: Icon(Icons.dangerous_outlined,color: Colors.red,)),
+            IconButton(onPressed: () async{
+              return showDialog(context: context, builder: (BuildContext context)=>AlertDialog(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                icon: Icon(Icons.warning,color: Colors.orange,),
+                title: RobotoText(size: 20, text: "Delete Blog",color: Colors.red,isbold: true,),
+                titlePadding: EdgeInsets.symmetric(horizontal: 85),
+                contentPadding: EdgeInsets.symmetric(horizontal: 85,vertical: 20),
+                content: RobotoText(size: 15, text: "Are you sure?",),
+                actionsAlignment: MainAxisAlignment.spaceAround,
+                actions: [MaterialButton(onPressed:(){Navigator.pop(context);},child: RobotoText(size: 15, text: "Delete",color: Colors.red,),),MaterialButton(onPressed:(){Navigator.pop(context);},child: RobotoText(size: 15, text: "Cancel",),)],
+              ));
+            }, icon: Icon(Icons.delete,color: Colors.red,)),
           ],
         ),
         Row(
